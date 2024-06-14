@@ -50,7 +50,7 @@ export const FunctionalPhoneInput = ({
           id="phone-input-1"
           placeholder="55"
         />
-        -
+
         <input
           ref={input2}
           type="tel"
@@ -62,7 +62,7 @@ export const FunctionalPhoneInput = ({
           id="phone-input-2"
           placeholder="55"
         />
-        -
+
         <input
           ref={input3}
           type="tel"
@@ -74,7 +74,7 @@ export const FunctionalPhoneInput = ({
           id="phone-input-3"
           placeholder="55"
         />
-        -
+
         <input
           ref={input4}
           type="tel"

@@ -62,7 +62,7 @@ export const FunctionalForm = ({ setValidUserData, setUserData }) => {
         lastName: lastNameInputState,
         email: emailInputState,
         city: cityInputState,
-        phone: phoneInputState.join("-"),
+        phone: phoneInputState.join(""),
       });
       setValidUserData(true);
       resetForm();

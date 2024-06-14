@@ -1,7 +1,11 @@
-import { Component, createRef } from "react";
+import { Component } from "react";
 import { ErrorMessage } from "../ErrorMessage";
+import { ClassNameInput } from "./ClassNameInput";
+import { ClassEmailInput } from "./ClassEmailInput";
 import { isEmailValid } from "../utils/validations";
+import { ClassCityInput } from "./ClassCityInput";
 import { allCities } from "../utils/all-cities";
+import { ClassPhoneInput } from "./ClassPhoneInput";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
@@ -13,35 +17,30 @@ export class ClassForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstNameInput: "",
-      lastNameInput: "",
-      emailInput: "",
-      cityInput: "",
+      firstNameInputState: "",
+      lastNameInputState: "",
+      emailInputState: "",
+      cityInputState: "",
       phoneInputState: ["", "", "", ""],
       isSubmitted: false,
       allValid: false,
     };
-
-    this.input1 = createRef();
-    this.input2 = createRef();
-    this.input3 = createRef();
-    this.input4 = createRef();
   }
 
-  setFirstNameInput = (value) => {
-    this.setState({ firstNameInput: value });
+  setFirstNameInputState = (value) => {
+    this.setState({ firstNameInputState: value });
   };
 
-  setLastNameInput = (value) => {
-    this.setState({ lastNameInput: value });
+  setLastNameInputState = (value) => {
+    this.setState({ lastNameInputState: value });
   };
 
-  setEmailInput = (value) => {
-    this.setState({ emailInput: value });
+  setEmailInputState = (value) => {
+    this.setState({ emailInputState: value });
   };
 
-  setCityInput = (value) => {
-    this.setState({ cityInput: value });
+  setCityInputState = (value) => {
+    this.setState({ cityInputState: value });
   };
 
   setPhoneInputState = (value) => {
@@ -53,28 +52,28 @@ export class ClassForm extends Component {
   };
 
   validateFirstName = () => {
-    if (this.state.firstNameInput.length >= 2) {
+    if (this.state.firstNameInputState.length >= 2) {
       return true;
     }
     return false;
   };
 
   validateLastName = () => {
-    if (this.state.lastNameInput.length >= 2) {
+    if (this.state.lastNameInputState.length >= 2) {
       return true;
     }
     return false;
   };
 
   validateEmail = () => {
-    if (isEmailValid(this.state.emailInput)) {
+    if (isEmailValid(this.state.emailInputState)) {
       return true;
     }
     return false;
   };
 
   validateCity = () => {
-    if (allCities.includes(this.state.cityInput)) {
+    if (allCities.includes(this.state.cityInputState)) {
       return true;
     }
     return false;
@@ -117,47 +116,32 @@ export class ClassForm extends Component {
     return this.state.isSubmitted && !this.validatePhone();
   };
 
-  phoneInputHandler = (index) => (e) => {
-    const newState = this.state.phoneInputState.map(
-      (phoneInput, phoneInputIndex) =>
-        index === phoneInputIndex ? e.target.value : phoneInput
-    );
-    this.setState({ phoneInputState: newState });
-  };
-
-  handleInput = (e, nextInput) => {
-    const value = e.target.value;
-    if (!/^\d*$/.test(value)) {
-      e.target.value = value.slice(0, -1);
-    } else if (value.length >= e.target.maxLength && nextInput) {
-      nextInput.current.focus();
-    }
-  };
-
-  handleBackspace = (e, prevInput) => {
-    if (
-      e.target.value.length === 0 &&
-      (e.key === "Backspace" || e.key === "Delete") &&
-      prevInput
-    ) {
-      prevInput.current.focus();
-    }
+  resetForm = () => {
+    this.setState({
+      firstNameInputState: "",
+      lastNameInputState: "",
+      emailInputState: "",
+      cityInputState: "",
+      phoneInputState: ["", "", "", ""],
+      isSubmitted: false,
+    });
   };
 
   handelSubmit = (e) => {
     e.preventDefault();
     this.setState({ isSubmitted: true });
-    if (this.allValid()) {
+    if (!this.allValid()) {
+      alert("Bad Input");
+    } else {
       this.props.setUserData({
-        firstName: this.state.firstNameInput,
-        lastName: this.state.lastNameInput,
-        email: this.state.emailInput,
-        city: this.state.cityInput,
-        phone: this.state.phoneInputState.join("-"),
+        firstName: this.state.firstNameInputState,
+        lastName: this.state.lastNameInputState,
+        email: this.state.emailInputState,
+        city: this.state.cityInputState,
+        phone: this.state.phoneInputState.join(""),
       });
       this.props.setValidUserData(true);
-    } else {
-      alert("Bad Input");
+      this.resetForm();
     }
   };
 
@@ -169,119 +153,55 @@ export class ClassForm extends Component {
         </u>
 
         {/* first name input */}
-        <div className="input-wrap">
-          <label>{"First Name"}:</label>
-          <input
-            type="text"
-            placeholder="Bilbo"
-            value={this.state.firstNameInput}
-            onChange={(e) => this.setFirstNameInput(e.target.value)}
-          />
-        </div>
+        <ClassNameInput
+          label={"First Name"}
+          type={"text"}
+          placeholder={"Bilbo"}
+          value={this.state.firstNameInputState}
+          setValue={this.setFirstNameInputState}
+        />
         <ErrorMessage
           message={firstNameErrorMessage}
           show={this.shouldShowFirstNameError()}
         />
 
         {/* last name input */}
-        <div className="input-wrap">
-          <label>{"Last Name"}:</label>
-          <input
-            type="text"
-            placeholder="Baggins"
-            value={this.state.lastNameInput}
-            onChange={(e) => this.setLastNameInput(e.target.value)}
-          />
-        </div>
+        <ClassNameInput
+          label={"Last Name"}
+          type={"text"}
+          placeholder={"Baggins"}
+          value={this.state.lastNameInputState}
+          setValue={this.setLastNameInputState}
+        />
         <ErrorMessage
           message={lastNameErrorMessage}
           show={this.shouldShowLastNameError()}
         />
 
         {/* Email Input */}
-        <div className="input-wrap">
-          <label>{"Email"}:</label>
-          <input
-            type="email"
-            placeholder="bilbo-baggins@adventurehobbits.net"
-            value={this.state.emailInput}
-            onChange={(e) => this.setEmailInput(e.target.value)}
-          />
-        </div>
+        <ClassEmailInput
+          emailInputState={this.state.emailInputState}
+          setEmailInputState={this.setEmailInputState}
+        />
         <ErrorMessage
           message={emailErrorMessage}
           show={this.shouldShowEmailError()}
         />
 
         {/* City Input */}
-        <div className="input-wrap">
-          <label>{"City"}:</label>
-          <input
-            type="text"
-            list="cities"
-            placeholder="Hobbiton"
-            value={this.cityInput}
-            onChange={(e) => this.setCityInput(e.target.value)}
-          />
-        </div>
+        <ClassCityInput
+          cityInputState={this.state.cityInputState}
+          setCityInputState={this.setCityInputState}
+        />
         <ErrorMessage
           message={cityErrorMessage}
           show={this.shouldShowCityError()}
         />
 
-        <div className="input-wrap">
-          <label htmlFor="phone">Phone:</label>
-          <div id="phone-input-wrap">
-            <input
-              ref={this.input1}
-              type="tel"
-              maxLength={2}
-              onKeyDown={(e) => this.handleBackspace(e, null)}
-              onInput={(e) => this.handleInput(e, this.input2)}
-              value={this.state.phoneInputState[0]}
-              onChange={this.phoneInputHandler(0)}
-              id="phone-input-1"
-              placeholder="55"
-            />
-            -
-            <input
-              ref={this.input2}
-              type="tel"
-              maxLength={2}
-              onKeyDown={(e) => this.handleBackspace(e, this.input1)}
-              onInput={(e) => this.handleInput(e, this.input3)}
-              value={this.state.phoneInputState[1]}
-              onChange={this.phoneInputHandler(1)}
-              id="phone-input-2"
-              placeholder="55"
-            />
-            -
-            <input
-              ref={this.input3}
-              type="tel"
-              maxLength={2}
-              onKeyDown={(e) => this.handleBackspace(e, this.input2)}
-              onInput={(e) => this.handleInput(e, this.input4)}
-              value={this.state.phoneInputState[2]}
-              onChange={this.phoneInputHandler(2)}
-              id="phone-input-3"
-              placeholder="55"
-            />
-            -
-            <input
-              ref={this.input4}
-              type="tel"
-              maxLength={1}
-              onKeyDown={(e) => this.handleBackspace(e, this.input3)}
-              onInput={(e) => this.handleInput(e, null)}
-              value={this.state.phoneInputState[3]}
-              onChange={this.phoneInputHandler(3)}
-              id="phone-input-4"
-              placeholder="5"
-            />
-          </div>
-        </div>
-
+        <ClassPhoneInput
+          phoneInputState={this.state.phoneInputState}
+          setPhoneInputState={this.setPhoneInputState}
+        />
         <ErrorMessage
           message={phoneNumberErrorMessage}
           show={this.shouldShowPhoneNumberError()}
