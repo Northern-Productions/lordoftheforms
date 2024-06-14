@@ -218,7 +218,7 @@ export class ClassForm extends Component {
           <label>{"City"}:</label>
           <input
             type="text"
-            list="allCities"
+            list="cities"
             placeholder="Hobbiton"
             value={this.cityInput}
             onChange={(e) => this.setCityInput(e.target.value)}
