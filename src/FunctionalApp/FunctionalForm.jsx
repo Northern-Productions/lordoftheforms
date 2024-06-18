@@ -1,11 +1,7 @@
 import { useState } from "react";
-import { ErrorMessage } from "../ErrorMessage";
-import { FunctionalNameInput } from "./FunctionalNameInput";
-import { FunctionalEmailInput } from "./FunctionalEmailInput";
+import { FunctionalTextInput } from "./FunctionalTextInput";
 import { isEmailValid } from "../utils/validations";
-import { FunctionalCityInput } from "./FunctionalCityInput";
 import { isCityValid } from "../utils/validations";
-import { allCities } from "../utils/all-cities";
 import { FunctionalPhoneInput } from "./FunctionalPhoneInput";
 import { isPhoneValid } from "../utils/validations";
 
@@ -15,7 +11,7 @@ const emailErrorMessage = "Email is Invalid";
 const cityErrorMessage = "State is Invalid";
 const phoneNumberErrorMessage = "Invalid Phone Number";
 
-export const FunctionalForm = ({ setValidUserData, setUserData }) => {
+export const FunctionalForm = ({ setUserData }) => {
   const [firstNameInputState, setFirstNameInputState] = useState("");
   const [lastNameInputState, setLastNameInputState] = useState("");
   const [emailInputState, setEmailInputState] = useState("");
@@ -31,15 +27,14 @@ export const FunctionalForm = ({ setValidUserData, setUserData }) => {
   const shouldShowFirstNameError = isSubmitted && !isFirstNameValid;
   const shouldShowLastNameError = isSubmitted && !isLastNameValid;
   const shouldShowEmailError = isSubmitted && !isEmailValid(emailInputState);
-  const shouldShowCityError =
-    isSubmitted && !isCityValid(allCities, cityInputState);
+  const shouldShowCityError = isSubmitted && !isCityValid(cityInputState);
   const shouldShowPhoneNumberError = isSubmitted && !isPhoneNumberValid;
 
   const allValid =
     isFirstNameValid &&
     isLastNameValid &&
     isEmailValid(emailInputState) &&
-    isCityValid(allCities, cityInputState) &&
+    isCityValid(cityInputState) &&
     isPhoneNumberValid;
 
   const resetForm = () => {
@@ -64,7 +59,6 @@ export const FunctionalForm = ({ setValidUserData, setUserData }) => {
         city: cityInputState,
         phone: phoneInputState.join(""),
       });
-      setValidUserData(true);
       resetForm();
     }
   };
@@ -76,54 +70,60 @@ export const FunctionalForm = ({ setValidUserData, setUserData }) => {
       </u>
 
       {/* first name input */}
-      <FunctionalNameInput
-        label="First Name"
-        type="text"
-        placeholder="Bilbo"
-        value={firstNameInputState}
-        setValue={setFirstNameInputState}
-      />
-
-      <ErrorMessage
-        message={firstNameErrorMessage}
-        show={shouldShowFirstNameError}
+      <FunctionalTextInput
+        inputProps={{
+          id: "First Name",
+          placeholder: "Bilbo",
+          value: firstNameInputState,
+        }}
+        updateStateFunction={setFirstNameInputState}
+        errorMessageText={firstNameErrorMessage}
+        shouldErrorShowUp={shouldShowFirstNameError}
       />
 
       {/* last name input */}
-      <FunctionalNameInput
-        label="Last Name"
-        type="text"
-        placeholder="Baggins"
-        value={lastNameInputState}
-        setValue={setLastNameInputState}
-      />
-      <ErrorMessage
-        message={lastNameErrorMessage}
-        show={shouldShowLastNameError}
+      <FunctionalTextInput
+        inputProps={{
+          id: "Last Name",
+          placeholder: "Baggins",
+          value: lastNameInputState,
+        }}
+        updateStateFunction={setLastNameInputState}
+        errorMessageText={lastNameErrorMessage}
+        shouldErrorShowUp={shouldShowLastNameError}
       />
 
       {/* Email Input */}
-      <FunctionalEmailInput
-        emailInputState={emailInputState}
-        setEmailInputState={setEmailInputState}
+      <FunctionalTextInput
+        inputProps={{
+          id: "Email",
+          placeholder: "bilbo-baggins@adventurehobbits.net",
+          value: emailInputState,
+        }}
+        updateStateFunction={setEmailInputState}
+        errorMessageText={emailErrorMessage}
+        shouldErrorShowUp={shouldShowEmailError}
       />
-      <ErrorMessage message={emailErrorMessage} show={shouldShowEmailError} />
 
       {/* City Input */}
-      <FunctionalCityInput
-        cityInputState={cityInputState}
-        setCityInputState={setCityInputState}
+      <FunctionalTextInput
+        inputProps={{
+          id: "City",
+          placeholder: "Hobbiton",
+          value: cityInputState,
+          list: "cities",
+        }}
+        updateStateFunction={setCityInputState}
+        errorMessageText={cityErrorMessage}
+        shouldErrorShowUp={shouldShowCityError}
       />
-      <ErrorMessage message={cityErrorMessage} show={shouldShowCityError} />
 
       {/* Phone Input */}
       <FunctionalPhoneInput
         phoneInputState={phoneInputState}
         setPhoneInputState={setPhoneInputState}
-      />
-      <ErrorMessage
-        message={phoneNumberErrorMessage}
-        show={shouldShowPhoneNumberError}
+        errorMessageText={phoneNumberErrorMessage}
+        ShouldErrorShowUp={shouldShowPhoneNumberError}
       />
 
       <input type="submit" value="Submit" />

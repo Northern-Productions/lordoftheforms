@@ -1,10 +1,7 @@
 import { Component } from "react";
-import { ErrorMessage } from "../ErrorMessage";
-import { ClassNameInput } from "./ClassNameInput";
-import { ClassEmailInput } from "./ClassEmailInput";
+import { ClassTextInput } from "./ClassTextInput";
 import { isEmailValid } from "../utils/validations";
-import { ClassCityInput } from "./ClassCityInput";
-import { allCities } from "../utils/all-cities";
+import { isCityValid } from "../utils/validations";
 import { ClassPhoneInput } from "./ClassPhoneInput";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
@@ -73,7 +70,7 @@ export class ClassForm extends Component {
   };
 
   validateCity = () => {
-    if (allCities.includes(this.state.cityInputState)) {
+    if (isCityValid(this.state.cityInputState)) {
       return true;
     }
     return false;
@@ -140,7 +137,6 @@ export class ClassForm extends Component {
         city: this.state.cityInputState,
         phone: this.state.phoneInputState.join(""),
       });
-      this.props.setValidUserData(true);
       this.resetForm();
     }
   };
@@ -153,58 +149,60 @@ export class ClassForm extends Component {
         </u>
 
         {/* first name input */}
-        <ClassNameInput
-          label={"First Name"}
-          type={"text"}
-          placeholder={"Bilbo"}
-          value={this.state.firstNameInputState}
-          setValue={this.setFirstNameInputState}
-        />
-        <ErrorMessage
-          message={firstNameErrorMessage}
-          show={this.shouldShowFirstNameError()}
+        <ClassTextInput
+          inputProps={{
+            id: "First Name",
+            placeholder: "Bilbo",
+            value: this.state.firstNameInputState,
+          }}
+          updateStateFunction={this.setFirstNameInputState}
+          shouldErrorShowUp={this.shouldShowFirstNameError()}
+          errorMessageText={firstNameErrorMessage}
         />
 
         {/* last name input */}
-        <ClassNameInput
-          label={"Last Name"}
-          type={"text"}
-          placeholder={"Baggins"}
-          value={this.state.lastNameInputState}
-          setValue={this.setLastNameInputState}
-        />
-        <ErrorMessage
-          message={lastNameErrorMessage}
-          show={this.shouldShowLastNameError()}
+        <ClassTextInput
+          inputProps={{
+            id: "Last Name",
+            placeholder: "Baggins",
+            value: this.state.lastNameInputState,
+          }}
+          updateStateFunction={this.setLastNameInputState}
+          shouldErrorShowUp={this.shouldShowLastNameError()}
+          errorMessageText={lastNameErrorMessage}
         />
 
         {/* Email Input */}
-        <ClassEmailInput
-          emailInputState={this.state.emailInputState}
-          setEmailInputState={this.setEmailInputState}
-        />
-        <ErrorMessage
-          message={emailErrorMessage}
-          show={this.shouldShowEmailError()}
+        <ClassTextInput
+          inputProps={{
+            id: "Email",
+            placeholder: "bilbo-baggins@adventurehobbits.net",
+            value: this.state.emailInputState,
+          }}
+          updateStateFunction={this.setEmailInputState}
+          shouldErrorShowUp={this.shouldShowEmailError()}
+          errorMessageText={emailErrorMessage}
         />
 
         {/* City Input */}
-        <ClassCityInput
-          cityInputState={this.state.cityInputState}
-          setCityInputState={this.setCityInputState}
-        />
-        <ErrorMessage
-          message={cityErrorMessage}
-          show={this.shouldShowCityError()}
+        <ClassTextInput
+          inputProps={{
+            id: "City",
+            placeholder: "Hobbiton",
+            value: this.state.cityInputState,
+            list: "cities",
+          }}
+          updateStateFunction={this.setCityInputState}
+          shouldErrorShowUp={this.shouldShowCityError()}
+          errorMessageText={cityErrorMessage}
         />
 
+        {/* Phone Input */}
         <ClassPhoneInput
           phoneInputState={this.state.phoneInputState}
           setPhoneInputState={this.setPhoneInputState}
-        />
-        <ErrorMessage
-          message={phoneNumberErrorMessage}
-          show={this.shouldShowPhoneNumberError()}
+          shouldErrorShowUp={this.shouldShowPhoneNumberError()}
+          errorMessageText={phoneNumberErrorMessage}
         />
 
         <input type="submit" value="Submit" />

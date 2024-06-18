@@ -1,4 +1,5 @@
 import { Component, createRef } from "react";
+import { ErrorMessage } from "../ErrorMessage";
 
 export class ClassPhoneInput extends Component {
   constructor(props) {
@@ -37,59 +38,64 @@ export class ClassPhoneInput extends Component {
   };
 
   render() {
+    const { shouldErrorShowUp, errorMessageText } = this.props;
     return (
-      <div className="input-wrap">
-        <label htmlFor="phone">Phone:</label>
-        <div id="phone-input-wrap">
-          <input
-            ref={this.input1}
-            type="tel"
-            maxLength={2}
-            onKeyDown={(e) => this.handleBackspace(e, null)}
-            onInput={(e) => this.handleInput(e, this.input2)}
-            value={this.props.phoneInputState[0]}
-            onChange={this.phoneInputHandler(0)}
-            id="phone-input-1"
-            placeholder="55"
-          />
-
-          <input
-            ref={this.input2}
-            type="tel"
-            maxLength={2}
-            onKeyDown={(e) => this.handleBackspace(e, this.input1)}
-            onInput={(e) => this.handleInput(e, this.input3)}
-            value={this.props.phoneInputState[1]}
-            onChange={this.phoneInputHandler(1)}
-            id="phone-input-2"
-            placeholder="55"
-          />
-
-          <input
-            ref={this.input3}
-            type="tel"
-            maxLength={2}
-            onKeyDown={(e) => this.handleBackspace(e, this.input2)}
-            onInput={(e) => this.handleInput(e, this.input4)}
-            value={this.props.phoneInputState[2]}
-            onChange={this.phoneInputHandler(2)}
-            id="phone-input-3"
-            placeholder="55"
-          />
-
-          <input
-            ref={this.input4}
-            type="tel"
-            maxLength={1}
-            onKeyDown={(e) => this.handleBackspace(e, this.input3)}
-            onInput={(e) => this.handleInput(e, null)}
-            value={this.props.phoneInputState[3]}
-            onChange={this.phoneInputHandler(3)}
-            id="phone-input-4"
-            placeholder="5"
-          />
+      <>
+        <div className="input-wrap">
+          <label htmlFor="phone">Phone:</label>
+          <div id="phone-input-wrap">
+            <input
+              ref={this.input1}
+              type="tel"
+              maxLength={2}
+              onKeyDown={(e) => this.handleBackspace(e, null)}
+              onInput={(e) => this.handleInput(e, this.input2)}
+              value={this.props.phoneInputState[0]}
+              onChange={this.phoneInputHandler(0)}
+              id="phone-input-1"
+              placeholder="55"
+            />
+            -
+            <input
+              ref={this.input2}
+              type="tel"
+              maxLength={2}
+              onKeyDown={(e) => this.handleBackspace(e, this.input1)}
+              onInput={(e) => this.handleInput(e, this.input3)}
+              value={this.props.phoneInputState[1]}
+              onChange={this.phoneInputHandler(1)}
+              id="phone-input-2"
+              placeholder="55"
+            />
+            -
+            <input
+              ref={this.input3}
+              type="tel"
+              maxLength={2}
+              onKeyDown={(e) => this.handleBackspace(e, this.input2)}
+              onInput={(e) => this.handleInput(e, this.input4)}
+              value={this.props.phoneInputState[2]}
+              onChange={this.phoneInputHandler(2)}
+              id="phone-input-3"
+              placeholder="55"
+            />
+            -
+            <input
+              ref={this.input4}
+              type="tel"
+              maxLength={1}
+              onKeyDown={(e) => this.handleBackspace(e, this.input3)}
+              onInput={(e) => this.handleInput(e, null)}
+              value={this.props.phoneInputState[3]}
+              onChange={this.phoneInputHandler(3)}
+              id="phone-input-4"
+              placeholder="5"
+            />
+          </div>
         </div>
-      </div>
+
+        <ErrorMessage message={errorMessageText} show={shouldErrorShowUp} />
+      </>
     );
   }
 }
